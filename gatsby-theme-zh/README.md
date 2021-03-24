@@ -1,8 +1,10 @@
 # Gatsby Theme for zh ⚛
 
+✨ Polished Gatsby theme for documentation site.
+
 ## Usage
 
-Create a Gatsby site from [gatsby-starter-theme-zh](https://github.com/antvis/gatsby-starter-theme-antv).
+Create a Gatsby site from [gatsby-starter-theme-zh](https://github.com/antvis/gatsby-starter-theme-zh).
 
 ```bash
 $ yarn global add gatsby-cli // or npm install gatsby-cli -g
@@ -25,11 +27,11 @@ const { repository } = require('./package.json');
 module.exports = {
   plugins: [
     {
-      resolve: `@antv/gatsby-theme-zh`,
+      resolve: `gatsby-theme-zh`,
       options: {
         // pagesPath: './site/pages',
-        GATrackingId: `UA-XXXXXXXXX-X`,
-        pathPrefix: '/g2',
+        pathPrefix: '/',
+        // antd 主题：https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
         theme: {
           'primary-color': '#873bf4',
         },
@@ -47,7 +49,6 @@ module.exports = {
     navs: [], // 用于定义顶部菜单
     docs: [], // 用于定义文档页面的二级分类菜单
     examples: [], // 用于定义演示页面的二级菜单，属性见下方
-    galleryMenuCloseAll: false, // 是否默认收起 gallery 页面所有 menu
     showSearch: true, // 是否展示搜索框
     showChinaMirror: true, // 是否展示国内镜像链接
     showLanguageSwitcher: true, // 用于定义是否展示语言切换
@@ -55,10 +56,6 @@ module.exports = {
     showGithubCorner: true, // 是否展示角落的 GitHub 图标
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: true, // 是否在demo页展示API文档
-    mdPlayground: {
-      // markdown 文档中的 playground 若干设置
-      splitPaneMainSize: '62%',
-    },
     playground: {
       container: '<canvas id="container" />', // 定义演示的渲染节点，默认 <div id="container" />
       playgroundDidMount: 'console.log("playgroundDidMount");',
@@ -80,4 +77,41 @@ module.exports = {
     ],
   },
 };
+```
+
+## Develop
+
+```bash
+yarn install
+yarn start
+```
+
+Visit https://localhost:8000 to preview.
+
+## Publish to npm
+
+```bash
+cd gatsby-theme-zh
+npm run release
+```
+
+## Deploy
+
+```bash
+npm run deploy
+```
+
+> Set envoironment variable `GATSBY_PATH_PREFIX` to `/` in deploy service like netlify to preview pathPrefix site in root domain.
+
+## Add Dependency
+
+```bash
+cd gatsby-theme-zh
+yarn add shallowequal
+```
+
+or
+
+```bash
+yarn workspace gatsby-theme-zh shallowequal
 ```

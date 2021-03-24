@@ -1,0 +1,86 @@
+@import '~antd/es/style/themes/default.less';
+
+.shadowWrapper {
+  position: relative;
+  margin: 12px 0;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    height: 100%;
+    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0);
+    width: 1px;
+    transition: all 0.3s;
+  }
+
+  &::before {
+    left: -1px;
+  }
+
+  &::after {
+    right: -1px;
+  }
+}
+
+.cards {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0;
+  padding: 1px;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  width: 100px;
+  height: 70px;
+  margin: 8px 0 8px 8px;
+  cursor: pointer;
+  padding: 2px;
+  position: relative;
+  border: 1px solid #ebedf0;
+  transition: all 0.3s;
+  user-select: none;
+  background-color: #fff;
+
+  &:after {
+    transition: all 0.3s;
+    background-color: transparent;
+    border: 1px solid transparent;
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    right: -1px;
+    left: -1px;
+  }
+  &:hover {
+    background-color: fade(@primary-color, 10%);
+    border-color: @primary-color;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    border-color: #ddd;
+  }
+
+  &.current::after {
+    background-color: fade(@primary-color, 10%);
+    border-color: @primary-color;
+  }
+}
