@@ -223,7 +223,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           </Tooltip>
         </form>
       ) : null}
-      <Tooltip title={t('在 StackBlitz 中打开')}>
+      {/* <Tooltip title={t('在 StackBlitz 中打开')}>
         <ThunderboltOutlined
           className={styles.stackblitz}
           onClick={() => {
@@ -246,7 +246,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             <CodeSandboxOutlined style={{ marginLeft: 8 }} />
           </button>
         </form>
-      </Tooltip>
+      </Tooltip> */}
       <Paragraph copyable={{ text: sourceCode }} style={{ marginLeft: 6 }} />
       {playground.htmlCodeTemplate && (
         <>
