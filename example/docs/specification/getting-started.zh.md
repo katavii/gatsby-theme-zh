@@ -5,6 +5,8 @@ redirect_from:
   - /zh/docs/specification
 ---
 
+<playground path='basic/demo/basic.jsx' height='700px'></playground>
+
 [![](https://img.shields.io/travis/antvis/g2.svg)](https://travis-ci.org/antvis/g2)
 ![](https://img.shields.io/badge/language-javascript-red.svg)
 ![](https://img.shields.io/badge/license-MIT-000000.svg)

@@ -3,11 +3,9 @@ import React, { useRef, useEffect, useState } from 'react';
 // gatsby ssr not support Suspense&lazy https://github.com/gatsbyjs/gatsby/issues/11960
 import loadable from '@loadable/component';
 import { useStaticQuery, graphql } from 'gatsby';
-import { useMedia } from 'react-use';
+import { useDebounce } from 'react-use';
 import classNames from 'classnames';
 import { Result } from 'antd';
-import debounce from 'lodash/debounce';
-import get from 'lodash/get';
 import {
   useTranslation,
   withTranslation,
@@ -62,8 +60,13 @@ const PlayGround: React.FC<PlayGroundProps> = ({
       }
     `,
   );
-
-  const splitPaneSize = get(site.siteMetadata, ['splitPaneMainSize'], '62%');
+  const {
+    siteMetadata: {
+      mdPlayground: { splitPaneMainSize },
+    },
+  } = site;
+  console.log(splitPaneMainSize);
+  const splitPaneSize = splitPaneMainSize || '62%';
   const { t, i18n } = useTranslation();
   const playgroundNode = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<Error | null>();
@@ -111,16 +114,15 @@ insertCss(`;
     }
   };
 
-  const execute = debounce(
-    (
-      code: string,
-      node: HTMLDivElement,
-      exampleContainer: string | undefined,
-    ) => {
-      const script = document.createElement('script');
-      // replace container id in case of multi demos in document
-      const newCode = code.replace(/'container'|"container"/, `'${replaceId}'`);
-      script.innerHTML = `
+  const execute = (
+    code: string,
+    node: HTMLDivElement,
+    exampleContainer: string | undefined,
+  ) => {
+    const script = document.createElement('script');
+    // replace container id in case of multi demos in document
+    const newCode = code.replace(/'container'|"container"/, `'${replaceId}'`);
+    script.innerHTML = `
         try {
           ${newCode}
         } catch(e) {
@@ -129,12 +131,11 @@ insertCss(`;
           }
         }
       `;
-      // eslint-disable-next-line no-param-reassign
-      node.innerHTML = exampleContainer || `<div id=${replaceId} />`;
-      node!.appendChild(script);
-    },
-    300,
-  );
+    // eslint-disable-next-line no-param-reassign
+    node.innerHTML = exampleContainer || `<div id=${replaceId} />`;
+    node!.appendChild(script);
+    console.log(1);
+  };
 
   const executeCode = () => {
     if (!compiledCode || !playgroundNode || !playgroundNode.current) {
@@ -143,9 +144,13 @@ insertCss(`;
     execute(compiledCode, playgroundNode.current, playground.container);
   };
 
-  useEffect(() => {
-    executeCode();
-  }, [compiledCode, error]);
+  useDebounce(
+    () => {
+      executeCode();
+    },
+    1000,
+    [compiledCode, error],
+  );
 
   useEffect(() => {
     if (playground.playgroundDidMount) {
@@ -222,6 +227,9 @@ insertCss(`;
         lineNumbersMinChars: 4,
         showFoldingControls: 'always',
         foldingHighlight: true,
+        scrollbar: {
+          alwaysConsumeMouseWheel: false,
+        },
       }}
       onChange={(value) => onCodeChange(value)}
       editorWillMount={(monaco) => {
@@ -244,8 +252,6 @@ insertCss(`;
   const fileExtension =
     relativePath.split('.')[relativePath.split('.').length - 1] || 'js';
 
-  const isWide = useMedia('(min-width: 767.99px)', true);
-
   const dispatchResizeEvent = () => {
     const e = new Event('resize');
     window.dispatchEvent(e);
@@ -255,10 +261,10 @@ insertCss(`;
     <div
       className={styles.playground}
       ref={fullscreenNode}
-      style={height ? { height } : {}}
+      style={{ height: height || 700 }}
     >
       <SplitPane
-        split={isWide ? 'vertical' : 'horizontal'}
+        split="horizontal"
         defaultSize={splitPaneSize}
         minSize={100}
         onDragFinished={dispatchResizeEvent}
@@ -298,7 +304,6 @@ insertCss(`;
           />
           <div
             className={styles.monaco}
-            // toolbar height = 36px
             style={{ height: 'calc(100% - 36px)' }}
           >
             {editor}
