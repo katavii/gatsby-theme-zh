@@ -227,6 +227,9 @@ insertCss(`;
         lineNumbersMinChars: 4,
         showFoldingControls: 'always',
         foldingHighlight: true,
+        scrollbar: {
+          alwaysConsumeMouseWheel: false,
+        },
       }}
       onChange={(value) => onCodeChange(value)}
       editorWillMount={(monaco) => {
